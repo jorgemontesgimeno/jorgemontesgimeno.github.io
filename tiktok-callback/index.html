@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Autorización TikTok · AmoLosDatos</title>
+<link rel="stylesheet" href="../estilo.css">
+</head>
+<body><div class="wrap">
+<header><a class="logo" href="../">Amolos<span>Datos</span></a></header>
+<h1>Autorización de TikTok</h1>
+<div id="ok" class="card" hidden>
+  <p>✅ TikTok ha devuelto el código de autorización. Cópialo y pégalo en n8n (caduca en unos minutos y solo sirve una vez).</p>
+  <div class="code" id="code"></div>
+  <button id="copiar" type="button">Copiar código</button>
+  <p class="muted" id="estado"></p>
+</div>
+<div id="err" class="card" hidden>
+  <p>❌ TikTok ha devuelto un error:</p>
+  <div class="code" id="errmsg"></div>
+</div>
+<div id="nada" class="card" hidden>
+  <p>Esta página recibe la respuesta del inicio de sesión de TikTok para AmoLosDatos Publisher. Ábrela solo desde el enlace de autorización.</p>
+</div>
+<p class="muted">Esta página no guarda ni envía ningún dato: solo muestra el código en tu navegador.</p>
+</div>
+<script>
+  (function () {
+    var p = new URLSearchParams(window.location.search);
+    var code = p.get('code');
+    var error = p.get('error');
+    if (code) {
+      document.getElementById('ok').hidden = false;
+      document.getElementById('code').textContent = code;
+      document.getElementById('estado').textContent = 'state: ' + (p.get('state') || '(vacío)');
+      document.getElementById('copiar').addEventListener('click', function () {
+        navigator.clipboard.writeText(code).then(function () {
+          document.getElementById('copiar').textContent = '¡Copiado!';
+        });
+      });
+    } else if (error) {
+      document.getElementById('err').hidden = false;
+      document.getElementById('errmsg').textContent = error + ': ' + (p.get('error_description') || '');
+    } else {
+      document.getElementById('nada').hidden = false;
+    }
+  })();
+</script>
+</body>
+</html>
